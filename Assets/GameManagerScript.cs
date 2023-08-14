@@ -14,7 +14,12 @@ public class GameManagerScript : MonoBehaviour
     //script
     private PlayerMovementScript PlayerScript;
 
+
+    
     public AudioSource BackgroundMusic;
+    public AudioSource HitSound;
+    public AudioSource ButtonSound;
+
     public Slider VolumeSlider;
     //float m_MySliderValue;
 
@@ -38,11 +43,14 @@ public class GameManagerScript : MonoBehaviour
 
     public void Options()
     {
+        ButtonSound.Play();
         OptionsScreen.SetActive(true);
         PauseScreen.SetActive(false);
     }
     public void Pause()
     {
+        ButtonSound.Play();
+
         PauseScore.text = ScoreInt.ToString();
         Time.timeScale = 0;
         GameOverlayCanvas.SetActive(false);
@@ -52,6 +60,8 @@ public class GameManagerScript : MonoBehaviour
 
     public void Resume()
     {
+        ButtonSound.Play();
+
         Time.timeScale = 1;
         GameOverlayCanvas.SetActive(true);
         PauseScreen.SetActive(false);
@@ -61,6 +71,8 @@ public class GameManagerScript : MonoBehaviour
 
     public void RestartButton()
     {
+        ButtonSound.Play();
+
         PlatformSpeed = 5f;
         Time.timeScale = 1;
         PlayerScript.IsHit = false;
@@ -84,6 +96,8 @@ public class GameManagerScript : MonoBehaviour
 
     public void Save()
     {
+        ButtonSound.Play();
+
         //set playerprefs Volume to volumeslider.value
         PlayerPrefs.SetFloat("Volume", VolumeSlider.value);
         OptionsScreen.SetActive(false);
@@ -92,6 +106,8 @@ public class GameManagerScript : MonoBehaviour
 
     void Start()
     {
+        HitSound.volume = 0f;
+
         VolumeSlider.value = PlayerPrefs.GetFloat("Volume");
         PlayerScript = GameObject.Find("Player").GetComponent<PlayerMovementScript>();
         GameOverlayCanvas = GameObject.Find("Overlay");
@@ -158,6 +174,11 @@ public class GameManagerScript : MonoBehaviour
 
     void PlayerHit()
     {
+        BackgroundMusic.volume = 0f;
+        HitSound.volume = 1f;
+        HitSound.Play();
+        
+
         PlatformSpeed = 0;
         Time.timeScale = 0;
         GameOverlayCanvas.SetActive(false);
